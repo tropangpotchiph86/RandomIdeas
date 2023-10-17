@@ -151,6 +151,10 @@ form label {
   background: orange;
 }
 
+.tag-tropangpotchi {
+  background: mediumslateblue;
+}
+
 .delete {
   position: absolute;
   top: 10px;
