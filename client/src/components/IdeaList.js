@@ -56,7 +56,7 @@ class IdeaList {
             Posted on <span class="date">${idea.date}</span> by
             <span class="author">${idea.username}</span>
           </p>
-        </div>;`;
+        </div>`;
       })
       .join('');
   }
