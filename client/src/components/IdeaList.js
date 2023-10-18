@@ -1,11 +1,10 @@
-import IdeasApi from '../services/ideasApi';
+import ideasApi from '../services/ideasApi';
 
 class IdeaList {
   constructor() {
     this._ideaListEl = document.querySelector('#idea-list');
     this._ideas = [];
     this.getIdeas();
-
     this._validTags = new Set();
     this._validTags.add('technology');
     this._validTags.add('software');
@@ -13,6 +12,7 @@ class IdeaList {
     this._validTags.add('education');
     this._validTags.add('health');
     this._validTags.add('inventions');
+    this._validTags.add('tropangpotchi');
   }
 
   addEventListeners() {
@@ -21,28 +21,30 @@ class IdeaList {
         e.stopImmediatePropagation();
         const ideaId = e.target.parentElement.parentElement.dataset.id;
         this.deleteIdea(ideaId);
+        // console.log(ideaId);
       }
     });
   }
 
-  async getIdeas() {
-    try {
-      const res = await IdeasApi.getIdeas();
-      this._ideas = res.data.data;
-      this.render();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   async deleteIdea(ideaId) {
     try {
-      // Delete from server
-      const res = await IdeasApi.deleteIdea(ideaId);
+      //Delete from server
+      const res = await ideasApi.deleteIdea(ideaId);
       this._ideas.filter((idea) => idea._id !== ideaId);
       this.getIdeas();
     } catch (error) {
-      alert('You can not delete this resource');
+      alert('You cannot delete this resource');
+    }
+  }
+
+  async getIdeas() {
+    try {
+      const res = await ideasApi.getIdeas();
+      this._ideas = res.data.data;
+      this.render();
+      // console.log(this._ideas);
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -61,7 +63,6 @@ class IdeaList {
     }
     return tagClass;
   }
-
   render() {
     this._ideaListEl.innerHTML = this._ideas
       .map((idea) => {
@@ -72,17 +73,16 @@ class IdeaList {
             : '';
         return `
       <div class="card" data-id="${idea._id}">
-     ${deleteBtn}
-      <h3>
-        ${idea.text}
-      </h3>
-      <p class="tag ${tagClass}">${idea.tag.toUpperCase()}</p>
-      <p>
-        Posted on <span class="date">${idea.date}</span> by
-        <span class="author">${idea.username}</span>
-      </p>
-    </div>
-      `;
+          ${deleteBtn}
+          <h3>
+           ${idea.text}
+          </h3>
+          <p class="tag ${tagClass}">${idea.tag.toUpperCase()}</p>
+          <p>
+            Posted on <span class="date">${idea.date}</span> by
+            <span class="author">${idea.username}</span>
+          </p>
+        </div>`;
       })
       .join('');
     this.addEventListeners();
